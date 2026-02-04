@@ -304,7 +304,7 @@ namespace SodBuildingUpgrader {
                             if (blueprint.Operation != EBlueprintOperation.RepairTargetItem && blueprint.outputs != null) {
                                 bool bTry = false;
                                 foreach (var output in blueprint.outputs) {
-                                    if (blueprint.outputs[0].IsItem(sa)) {
+                                    if (output != null && output.IsItem(sa)) {
                                         bTry = true;
                                         break;
                                     }
@@ -329,3 +329,4 @@ namespace SodBuildingUpgrader {
 
     }
 }
+
