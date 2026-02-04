@@ -1,8 +1,7 @@
 # SOD Building Upgrade Tool
 A tool to upgrade sturctures and barricades without the need to salvage them first.
 for example on vanilla maps, to upgrade pine floor to metal floor just get 10 metal then hit the floor with a hammer.
-a video demonstrating it:
-https://cdn.discordapp.com/attachments/617435457449361409/1393752307505692825/BuildingUpgrade.mp4?ex=6983e57c&is=698293fc&hm=f870dd59e3eb9d32f4b2739357bf23cb3fc61aa65fdc487d955a1572852a1f67&
+a video demonstrating it: [[here]](https://cdn.discordapp.com/attachments/617435457449361409/1393752307505692825/BuildingUpgrade.mp4?ex=6983e57c&is=698293fc&hm=f870dd59e3eb9d32f4b2739357bf23cb3fc61aa65fdc487d955a1572852a1f67&)
 
 # How to use
 - This module can run on any server. no rocketmod or other plugin platforms is needed.
