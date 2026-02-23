@@ -196,9 +196,11 @@ namespace SodBuildingUpgrader {
                 yield break;
             }
 
+            NetId dropNetId = drop.GetNetId();
+
             yield return null; // AtNextTick
 
-            PerformStructUpgrade(drop, x, y, targetAsset, player);
+            PerformStructUpgrade(dropNetId, x, y, targetAsset, player);
         }
 
         static IEnumerator UpgradeBarricadeAtNextTick(BarricadeDrop drop, byte x, byte y, List<ItemAsset> upgradeTo, Player player) {
@@ -215,17 +217,25 @@ namespace SodBuildingUpgrader {
                 yield break;
             }
 
+            NetId dropNetId = drop.GetNetId();
+
             yield return null; // AtNextTick
 
-            PerformBarricadeUpgrade(drop, x, y, targetAsset, player);
+            PerformBarricadeUpgrade(dropNetId, x, y, targetAsset, player);
         }
 
-        static void PerformStructUpgrade(StructureDrop drop, byte x, byte y, ItemStructureAsset targetAsset, Player player) {
+        static void PerformStructUpgrade(NetId dropNetId, byte x, byte y, ItemStructureAsset targetAsset, Player player) {
             try {
                 if (!player.inventory.HasItemByAsset(targetAsset)) { // anohter check cuz it is possible when items got auto crafted then it dropped on ground if no inventory space. also this is new tick. so good to do another check at this tick to be 100% safe
                     return;
                 }
-                if (drop.GetNetId() == NetId.INVALID) { // that mean it got removed in the previous tick or in the current tick before reaching here
+                //if (drop.GetNetId() == NetId.INVALID) { // that mean it got removed in the previous tick or in the current tick before reaching here
+                //    return;
+                //}
+                // some how the drop point can point to new drop after old being destroyed, which will return valid net id.
+                // so changing approach to count on net id at first place
+                StructureDrop drop = NetIdRegistry.Get<StructureDrop>(dropNetId);
+                if (drop == null) {
                     return;
                 }
 
@@ -255,14 +265,20 @@ namespace SodBuildingUpgrader {
         }
         static readonly ClientInstanceMethod<byte> SendHealth = ClientInstanceMethod<byte>.Get(typeof(StructureDrop), "ReceiveHealth");
 
-        static void PerformBarricadeUpgrade(BarricadeDrop drop, byte x, byte y, ItemBarricadeAsset targetAsset, Player player) {
+        static void PerformBarricadeUpgrade(NetId dropNetId, byte x, byte y, ItemBarricadeAsset targetAsset, Player player) {
             try {
                 if (!player.inventory.HasItemByAsset(targetAsset)) { // anohter check cuz it is possible when items got auto crafted then it dropped on ground if no inventory space. also this is new tick. so good to do another check at this tick to be 100% safe
                     return;
                 }
-                if (drop.GetNetId() == NetId.INVALID) { // that mean it got removed in the previous tick or in the current tick before reaching here
+                //if (drop.GetNetId() == NetId.INVALID) { // that mean it got removed in the previous tick or in the current tick before reaching here
+                //    return;
+                //}
+
+                BarricadeDrop drop = NetIdRegistry.Get<BarricadeDrop>(dropNetId);
+                if (drop == null) {
                     return;
                 }
+
                 BarricadeData oldBData = drop.GetServersideData();
                 if (oldBData != null) {
                     var oldAsset = drop.asset;
@@ -329,4 +345,3 @@ namespace SodBuildingUpgrader {
 
     }
 }
-
